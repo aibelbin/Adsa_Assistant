@@ -1,29 +1,45 @@
-from groq import Groq
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os 
 import websockets
 import asyncio
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
+import VectorizeDb
 
+
+retriever = VectorizeDb.vector_store.as_retriever()
+
+load_dotenv()
+api_key = os.getenv("GROQ_API_KEY")
+
+llm = ChatGroq(temperature=0, model_name="llama-3.3-70b-versatile", disable_streaming = False, api_key = api_key)
+
+template = """Answer the question based only on the following context:
+{context}
+
+Question: {question}
+"""
+prompt = ChatPromptTemplate.from_template(template)
+
+rag_chain = (
+    {"context": retriever, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
 
 async def SttConnection():
     uri = "ws://127.0.0.1:8000/ws"
     async with websockets.connect(uri) as websocket: 
         print("Connected")
-        async for message in websocket: 
-            print(message)
-
-
+        async for message in websocket:
+            if message: 
+                response = await rag_chain.ainvoke(message) 
+            print(response)
+            return response
+        
 asyncio.run(SttConnection())
-load_dotenv()
-api_key = os.get("GROQ_API_KEY")
 
-client = Groq(api_key)
 
-def callAssistant(message):
-    response = client.chat.completions.create(
-        messages = [
-            {"role": 'f{message}'}     
-        ],
-        model = "llama-3.3-70b-versatile"
-    )
-    return (response[0].message.content)

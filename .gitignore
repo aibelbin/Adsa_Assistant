@@ -1,3 +1,6 @@
 .env
 /venv
 /ai/models
+/ai/AD_Asthra_Faculty_and_Venue-Sheet1.csv
+.csv
+.log

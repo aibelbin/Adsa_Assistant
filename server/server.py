@@ -26,8 +26,9 @@ async def websocket(websocket: WebSocket):
     
     await websocket.accept()
     host = websocket.client.host
+    print(f"{host} connected")
     
-    print(host)
+
     try:
         while True:
             latest_transcript = recorder.text()
