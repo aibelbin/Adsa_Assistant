@@ -1,15 +1,15 @@
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os 
-import websockets
-import asyncio
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-import VectorizeDb
+from ai import VectorizeDb
+
 
 
 retriever = VectorizeDb.vector_store.as_retriever()
+
 
 load_dotenv()
 api_key = os.getenv("GROQ_API_KEY")
@@ -31,16 +31,18 @@ rag_chain = (
     | StrOutputParser()
 )
 
-async def SttConnection():
-    uri = "ws://127.0.0.1:8000/ws"
-    async with websockets.connect(uri, open_timeout = 10) as websocket: 
-        print("Connected")
-        async for message in websocket:
-            if message: 
-                response = await rag_chain.ainvoke(message) 
-            print(response)
-            return response
+
+async def sendmessage(message):
+    response = await rag_chain.ainvoke(message)
+    print(response)
+    return response
+
+
+
+
         
-asyncio.run(SttConnection())
+
+
+
 
 
