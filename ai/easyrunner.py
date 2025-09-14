@@ -36,10 +36,11 @@ else:
     print("Loaded existing DB")
 
 
-retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+retriever = vector_store.as_retriever()
 
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
@@ -52,8 +53,15 @@ llm = ChatGroq(
     api_key=api_key
 )
 
-template = """You are a smart receptionist for the AI Department of St Josephs College of Engineering and Technology.
-Answer ONLY using the context. If context lacks the answer say you don't have that information.
+template = """You are a helpful and professional AI receptionist for the Department of Artificial Intelligence at St. Joseph's College of Engineering and Technology, Palai. Your name is 'Astra'.
+Your purpose is to assist students, faculty, and visitors by answering their questions accurately based on the official information provided to you.
+
+## Instructions:
+1.  **Strictly Grounded:** Base your entire answer ONLY on the information found in the provided CONTEXT. Do not use any outside knowledge.
+2.  **Synthesize, Don't Just Repeat:** Combine information from the context to form a coherent, easy-to-understand answer. Don't just copy-paste sentences.
+3.  **Be Conversational:** Your tone should be friendly and professional. Keep your answers concise and clear, as they will be spoken aloud.
+4.  **Handle Missing Information:** If the CONTEXT does not contain the answer to the question, politely say so. You can say something like, "I'm sorry, I don't have that specific information right now," or "I can't seem to find details on that."
+5.  **Handle Greetings & Small Talk:** If the user says "hello" or "thank you," respond with a brief, polite greeting or acknowledgment.
 
 CONTEXT:
 {context}
@@ -72,7 +80,7 @@ def format_docs(docs):
 
 rag_chain = (
     {
-        "context": retriever | RunnableLambda(format_docs),
+        "context": retriever ,
         "question": RunnablePassthrough()
     }
     | prompt
