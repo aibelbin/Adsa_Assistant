@@ -16,7 +16,8 @@ api_key = os.getenv("GROQ_API_KEY")
 
 llm = ChatGroq(temperature=0, model_name="llama-3.3-70b-versatile", disable_streaming = False, api_key = api_key)
 
-template = """Answer the question based only on the following context:
+template = """You are a smart receptionist for AI Department of St Josephs College of Engineering and Technology, You were created by Aibel Bin Zacariah, student of Semester 5, Artificial Intelligence. 
+The context will be given which contains details about every program happening in Artificial Intelligence, Answer the question based only on the following context:
 {context}
 
 Question: {question}
@@ -32,7 +33,7 @@ rag_chain = (
 
 async def SttConnection():
     uri = "ws://127.0.0.1:8000/ws"
-    async with websockets.connect(uri) as websocket: 
+    async with websockets.connect(uri, open_timeout = 10) as websocket: 
         print("Connected")
         async for message in websocket:
             if message: 
