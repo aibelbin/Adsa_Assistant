@@ -2,13 +2,16 @@ import sounddevice as sd
 import numpy as np
 from TTS.api import TTS
 import re
+import websockets
+import asyncio
 
 
 def split_text(text):
     return re.split(r'(?<=[.,!?]) +', text)
 
+uri = 'ws://192.168.220.7:8000/rc'
 
-def stream_tts(text, tts_model_name="tts_models/en/ljspeech/tacotron2-DDC", speaker=None):
+async def stream_tts(text, tts_model_name="tts_models/en/ljspeech/tacotron2-DDC", speaker=None):
     print("Loading TTS model...")
     tts = TTS(tts_model_name)
 
@@ -37,9 +40,12 @@ def stream_tts(text, tts_model_name="tts_models/en/ljspeech/tacotron2-DDC", spea
     sd.wait()
     print("Speech finished.")
 
-if __name__ == "__main__":
-    text = """
-    Hi, I am a Virtual Assistant made by Sjcet by Aibel Bin Zacariah
-    """
+async def listen_for_text():
+    async with websockets.connect(uri, open_timeout=10) as receiver:
+        print("Connected to WebSocket server.")
+        async for message in receiver:
+            print(f"Received message: {message}")
+            await stream_tts(message)
 
-    stream_tts(text)
+if __name__ == "__main__":
+    asyncio.run(listen_for_text())
