@@ -10,3 +10,4 @@ for i, (gs, ps, audio) in enumerate(generator):
     print(f"Segment {i} -> gs={gs}, ps={ps}")
     sd.play(audio, 24000)  # Play directly
     sd.wait()
+
