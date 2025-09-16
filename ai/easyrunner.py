@@ -11,6 +11,11 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda  # added
 
+
+
+# sd.default.device = "VoiceMeeter Input (VB-Audio VoiceMeeter VAIO)"  #test
+
+
 file = "ai/data.csv"
 persistent_dir = "./chromaFor_db"
 collection_name = "Asthra10.0"

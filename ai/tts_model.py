@@ -11,3 +11,5 @@ for i, (gs, ps, audio) in enumerate(generator):
     sd.play(audio, 24000)  # Play directly
     sd.wait()
 
+
+print(sd.query_devices())
