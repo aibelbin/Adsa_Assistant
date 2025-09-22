@@ -13,7 +13,8 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda  # adde
 
 
 
-sd.default.device = "VoiceMeeter Input (VB-Audio VoiceMeeter VAIO)"  #te
+# sd.default.device = "VoiceMeeter Input (VB-Audio VoiceMeeter VAIO)"  #test
+# this is just a test code to see wher the iported modules are going :) 
 
 
 file = "ai/data.csv"
