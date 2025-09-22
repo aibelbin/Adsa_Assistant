@@ -13,7 +13,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda  # adde
 
 
 
-# sd.default.device = "VoiceMeeter Input (VB-Audio VoiceMeeter VAIO)"  #test
+sd.default.device = "VoiceMeeter Input (VB-Audio VoiceMeeter VAIO)"  #te
 
 
 file = "ai/data.csv"
